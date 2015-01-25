@@ -1,0 +1,8 @@
+packages/*
+*.testsettings
+*.suo
+*.vsmdi
+*.csproj.user
+*.fsproj.user
+bin/
+obj/
