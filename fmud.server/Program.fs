@@ -1,6 +1,5 @@
 ﻿// Learn more about F# at http://fsharp.net
 // See the 'F# Tutorial' project for more help.
-
 open Owin
 open Microsoft.AspNet.SignalR
 open Microsoft.AspNet.SignalR.Hubs
@@ -10,7 +9,7 @@ open System
 open Microsoft.Owin
 
 type Startup() =
-     member this.Configuration(app:IAppBuilder) =
+    member this.Configuration(app:IAppBuilder) =
         app.UseCors(CorsOptions.AllowAll) |> ignore
         app.MapSignalR() |> ignore
 

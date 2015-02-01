@@ -1,0 +1,37 @@
+object
+	extra look
+	id/name/short/long/determinate
+	properties
+	light level
+	save/load
+	ownership
+	effects/shadow
+	
+mobile : object
+	weight
+	writing
+	uniqueness
+	movement
+	drop/pick up
+	colour/material
+	pronoun/possessive/alias/adjective/
+
+container : object
+	inventory
+	query contents
+	weight/volume limits
+	drop/pick up/loot/allow in other container
+	locating/finding/item visibility
+	item tracking (e.g. logging, restrictions)
+
+room : object
+	room contents
+
+shops
+	object valuation
+
+group objects
+
+help commands
+
+languages
