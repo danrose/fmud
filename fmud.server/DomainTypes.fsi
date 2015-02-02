@@ -31,8 +31,8 @@
 //        member AddExtraLook: ExtraLook -> unit
 //        member RemoveExtraLook: string -> unit
 //        abstract member QueryExtraLooks: unit -> seq<ExtraLook>
-//        member SetDeterminate: string -> unit
-//        abstract member GetDeterminate: unit -> string
+        member SetDeterminate: string -> unit
+        abstract member GetDeterminate: unit -> string
         
         // properties
 //        member AddProperty: PropertyEntry -> bool
@@ -60,11 +60,23 @@
         inherit GameObject
 
         // environment
-//        member Environment: unit -> GameObject option
+        member Environment: unit -> Container
+
+        // container flags
+        abstract member CanEnterContainer: Container -> bool
+        abstract member CanLeaveContainer: Container -> bool
 
         // weight
 //        member SetWeight: int -> unit
 //        member GetWeight: unit -> int
 
         // movement
-//        member Move: GameObject -> string -> string -> MoveResult
+        abstract member Move: Container -> string -> string -> MoveResult
+    and [<Class>]Container =
+       // member SetWeightLimit: Limit -> unit
+       // member GetWeightLimit: unit -> Limit
+      //  member Inventory: unit -> seq<GameObject>
+      //  member InventoryString: unit -> string
+      //  member DeepInventory: unit -> seq<GameObject>
+        abstract member AllowAdd: GameObject -> bool
+        abstract member AllowRemove: GameObject -> bool

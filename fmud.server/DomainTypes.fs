@@ -8,6 +8,7 @@
         let mutable name = ""
         let mutable short = ""
         let mutable long = ""
+        let mutable determinate = ""
         let mutable aliases = List.empty<string>
         let mutable plurals = List.empty<string>
         let mutable adjectives = List.empty<string>
@@ -52,6 +53,10 @@
         abstract GetPlurals: unit -> seq<string>
         default this.GetPlurals() = Seq.ofList plurals
 
+        member this.SetDeterminate (d:string) = determinate <- d
+        abstract GetDeterminate: unit -> string
+        default this.GetDeterminate() = determinate
+
         interface IDisposable with 
             member this.Dispose() =
                 ()
@@ -64,6 +69,66 @@
     [<AbstractClass>]
     type MobileObject(id: Guid) =
         inherit GameObject(id)
+
+        let mutable (environment:Container) = new Container()
+
+        let destinationIsSource (p:EnvPair) =
+            match p.source :> obj with
+            | :? IHaveContainer as con -> 
+                if con.Container() = p.destination then
+                    Failure Invalid
+                else
+                    Success p
+            | _ -> Success p
+
+        let canRemoveFromSource (p:EnvPair) =
+            let (env:Container) = p.source.Environment()
+            match p.source |> env.AllowRemove with
+                | false -> 
+                    Failure CantRemoveFromSource
+                | true ->
+                    Success p
+
+        let canEnterDestination (p:EnvPair) =
+            match p.source |> p.destination.AllowAdd with
+                | false -> 
+                    Failure CantAddToDestination
+                | true ->
+                    Success p
+
+        let moveValidations = 
+            destinationIsSource
+            >> bind canRemoveFromSource
+            >> bind canEnterDestination
+
+        member this.Environment() = environment
+
+        abstract CanEnterContainer: Container -> bool
+        default this.CanEnterContainer c =
+            true
+        abstract member CanLeaveContainer: Container -> bool
+        default this.CanLeaveContainer c =
+            true
+
+        abstract Move: Container -> string -> string -> MoveResult
+        default this.Move c msgOut msgIn =
+            match moveValidations {source=this; destination=c} with
+            | Success _ -> Ok // tell room, etc
+            | Failure reason -> reason
+
+    and IHaveContainer =
+        abstract Container:unit -> Container
+    and EnvPair = { source:MobileObject;destination:Container; }
+    and Container() =
+        let mutable (contents:MobileObject list) = List.empty
+
+        abstract member AllowAdd: GameObject -> bool
+        default this.AllowAdd g =
+            true
+
+        abstract member AllowRemove: GameObject -> bool
+        default this.AllowRemove g =
+            true
 
 
                 

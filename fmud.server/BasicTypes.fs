@@ -5,6 +5,10 @@
         | Unlimited
         | Timed of TimeSpan
 
+    type Limit =
+        | Unlimited
+        | Limit of int
+
     type PropertyEntry = 
         { key: string; value: string; timeout: PropertyTimeout }
 
@@ -12,9 +16,20 @@
         | LightLevel of int
 
     type MoveResult =
-        | InvalidDestination
+        | Invalid
+        | CantRemoveFromSource
+        | CantAddToDestination
         | TooHeavy
         | Ok
+
+    type Result<'TSuccess,'TFailure> = 
+        | Success of 'TSuccess
+        | Failure of 'TFailure
+
+    let bind switchFunction twoTrackInput = 
+        match twoTrackInput with
+        | Success s -> switchFunction s
+        | Failure f -> Failure f
 
     let anyWithSideEffects<'a> (f:'a -> bool) (s:seq<'a>) =
         let mutable ret = false
