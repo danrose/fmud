@@ -20,15 +20,13 @@
         abstract member GetLong: unit -> string
         member AddAlias: string -> unit
         member RemoveAlias: string -> bool
-//        abstract member GetAliases: unit -> seq<string>
-//        member AddPlural: string -> unit
-//        member RemovePlural: string -> bool
-//        abstract member GetPlurals: unit -> seq<string>
-//        member AddAdjective: string -> unit
-//        member AddAdjective: seq<string> -> unit
-//        member RemoveAdjective: string -> bool
-//        member RemoveAdjective: seq<string> -> unit
-//        abstract member GetAdjectives: unit -> seq<string>
+        abstract member GetAliases: unit -> seq<string>
+        member AddPlural: string -> unit
+        member RemovePlural: string -> bool
+        abstract member GetPlurals: unit -> seq<string>
+        member AddAdjective: string -> unit
+        member RemoveAdjective: string -> bool
+        abstract member GetAdjectives: unit -> seq<string>
 //        member CalculateExtraLooks: unit -> string
 //        member AddExtraLook: ExtraLook -> unit
 //        member RemoveExtraLook: string -> unit
