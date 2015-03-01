@@ -18,7 +18,7 @@
         type LightLevel = 
             | LightLevel of int
 
-        type MoveResult =
+        type MoveResult =  
             | Invalid
             | CantRemoveFromSource
             | CantAddToDestination
@@ -60,38 +60,8 @@
         type public MobileObject(id: Guid) =
             inherit GameObject(id)
 
-            let mutable (environment:Container) = new Container()
-
-            let destinationIsSource (p:EnvPair) =
-                match p.source :> obj with
-                | :? IHaveContainer as con -> 
-                    if con.Container = p.destination then
-                        Failure Invalid
-                    else
-                        Success p
-                | _ -> Success p
-
-            let canRemoveFromSource (p:EnvPair) =
-                let (env:Container) = p.source.Environment()
-                match p.source |> env.AllowRemove with
-                    | false -> 
-                        Failure CantRemoveFromSource
-                    | true ->
-                        Success p
-
-            let canEnterDestination (p:EnvPair) =
-                match p.source |> p.destination.AllowAdd with
-                    | false -> 
-                        Failure CantAddToDestination
-                    | true ->
-                        Success p
-
-            let moveValidations = 
-                destinationIsSource
-                >> bind canRemoveFromSource
-                >> bind canEnterDestination
-
-            member this.Environment() = environment
+            let mutable (environment:Container option) = None
+            member this.Environment with get() = environment and set(e) = environment <- e
 
             abstract CanEnterContainer: Container -> bool
             default this.CanEnterContainer c =
@@ -99,15 +69,6 @@
             abstract member CanLeaveContainer: Container -> bool
             default this.CanLeaveContainer c =
                 true
-
-            abstract Move: Container -> string -> string -> MoveResult
-            default this.Move c msgOut msgIn =
-                match moveValidations {source=this; destination=c} with
-                | Success _ -> 
-                    environment.Remove this
-                    c.Add this
-                    Ok // tell room, etc
-                | Failure reason -> reason
 
         and IHaveContainer =
             abstract Container:Container with get
