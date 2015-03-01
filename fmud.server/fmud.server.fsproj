@@ -41,9 +41,9 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets')" />
   <ItemGroup>
     <Compile Include="Grammar.fs" />
-    <Compile Include="BasicTypes.fs" />
-    <Compile Include="DomainTypes.fsi" />
+    <Compile Include="SharedFunctions.fs" />
     <Compile Include="DomainTypes.fs" />
+    <Compile Include="GameObject.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <None Include="packages.config" />
