@@ -20,14 +20,14 @@
             | None ->
                 Success p
             | Some env ->  
-                match p.source |> env.AllowRemove with
+                match true with //p.source |> env.AllowRemove with
                     | false -> 
                         Failure CantRemoveFromSource
                     | true ->
                         Success p
 
         let canEnterDestination (p:EnvPair) =
-            match p.source |> p.destination.AllowAdd with
+            match true with //p.source |> p.destination.AllowAdd with
                 | false -> 
                     Failure CantAddToDestination
                 | true ->
@@ -43,8 +43,8 @@
             | Success _ -> 
                 match Environment mob with
                 | Some env
-                    -> env.Remove mob
-                       destination.Add mob
+                    -> //env.Remove mob
+                      // destination.Add mob
                        Ok
                 | None 
                     -> Invalid

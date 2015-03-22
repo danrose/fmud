@@ -73,30 +73,20 @@
         and IHaveContainer =
             abstract Container:Container with get
         and EnvPair = { source:MobileObject;destination:Container; }
-        and public Container() =
-            let (contents:ResizeArray<MobileObject>) = ResizeArray<MobileObject>()
+        and public Container =
+            | Container of ResizeArray<MobileObject>
 
-            member this.Remove x =
-                contents.Remove x |> ignore
-            member this.Add = contents.Add
+            
 
-            abstract member AllowAdd: GameObject -> bool
-            default this.AllowAdd g =
-                true
+      //  [<AbstractClass>]
+     //   type public Room(id: Guid) =
+      //      inherit GameObject(id)
 
-            abstract member AllowRemove: GameObject -> bool
-            default this.AllowRemove g =
-                true
+       //     let container = Container()
 
-        [<AbstractClass>]
-        type public Room(id: Guid) =
-            inherit GameObject(id)
+        //    interface IHaveContainer with
+        //        member this.Container with get() = container
 
-            let container = Container()
-
-            interface IHaveContainer with
-                member this.Container with get() = container
-
-            member this.a = 1
+        //    member this.a = 1
 
                 
