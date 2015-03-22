@@ -77,23 +77,34 @@
         and public Container =
             | Container of ResizeArray<MobileObject>
 
+        type Gender = Neuter | Male | Female
+
+        [<AbstractClass>]
+        type public LivingObject(id: Guid) =
+            inherit MobileObject(id)
+
+            let mutable gender = Neuter
+            member this.Gender with get() = gender and set(g) = gender <- g
+
+        type public Player(id: Guid) =
+            inherit LivingObject(id)
+
         type MsgToken = 
             | Space
+            | Capitalise
             | Literal of string
-            | Possessive of MobileObject
+            | Possessive of LivingObject
             | Short of MobileObject
             | Long of MobileObject
             | OneShort of MobileObject
             | TheShort of MobileObject
-            | Pronoun of MobileObject
+            | PossessiveShort of LivingObject
+            | Pronoun of LivingObject
             | Objective of MobileObject
             | Verb of string * string
             | Style of Colour * Decoration
 
         type Message = MsgToken list
-
-        type public Player(id: Guid) =
-            inherit MobileObject(id)
 
 
       //  [<AbstractClass>]

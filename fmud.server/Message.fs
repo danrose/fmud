@@ -4,7 +4,7 @@
         open DomainTypes
         open GameObject
 
-        let per3 (func: Perspective -> GameObject -> string) mob first second =
+        let per3 func mob first second =
             let x = func (Calculate first) mob
             let x' = func (Calculate second) mob
             let x'' = func Third mob
@@ -18,7 +18,9 @@
                 | Some p -> 
                     p
             
-            let rec processStream msg first second third =
+            let rec processStream shouldCap msg first second third =
+                let cap s = if shouldCap then capitalise s else s
+                
                 match msg with
                 | [] -> 
                     let join list =
@@ -29,15 +31,21 @@
                     join first,join second, join third
                 | H::T ->
                     match H with
+                    | Capitalise ->
+                        processStream true T first second third
                     | Literal s ->
-                        processStream T (s::first) (s::second) (s::third)
+                        let append = cap s
+                        processStream false T (append::first) (append::second) (append::third)
                     | Space ->
-                        processStream T (" "::first) (" "::second) (" "::third)
+                        processStream false T (" "::first) (" "::second) (" "::third)
                     | Short mob ->
                         let s,s',s'' = per3 GameObject.GetShort mob person1 person2
-                        processStream T (s::first) (s'::second) (s''::third)
+                        processStream false T (cap s::first) (cap s'::second) (cap s''::third)
+                    | Possessive mob ->
+                        let s,s',s'' = per3 Living.GetPossessive mob person1 person2
+                        processStream false T (cap s::first) (cap s'::second) (cap s''::third)
                     | Verb (f,s) ->
-                        processStream T (f::first) (s::second) (s::third)
+                        processStream false T (cap f::first) (cap s::second) (cap s::third)
                     | _ -> failwith "unknown"
-            processStream msg [] [] []
+            processStream false msg [] [] []
             

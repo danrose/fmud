@@ -45,6 +45,7 @@
     <Compile Include="DomainTypes.fs" />
     <Compile Include="GameObject.fs" />
     <Compile Include="MobileObject.fs" />
+    <Compile Include="Living.fs" />
     <Compile Include="Container.fs" />
     <Compile Include="Message.fs" />
     <Compile Include="Program.fs" />

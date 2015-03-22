@@ -30,4 +30,7 @@
                 copy <- copy.Remove each
             copy
 
+        let capitalise (str:string) =
+            String.Concat(str.Substring(0, 1).ToUpper(), str.Substring(1))
+
 

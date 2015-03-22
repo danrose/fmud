@@ -19,7 +19,7 @@
             | Query qs
                 -> false
 
-        let private perspective (who:Perspective) (ob:GameObject) fp (f: GameObject -> string) =
+        let perspective (who:Perspective) (ob:GameObject) fp (f: GameObject -> string) =
             match who with
             | Calculate w when w = ob ->
                 fp
@@ -78,6 +78,7 @@
 
         let RemovePlural (ob:GameObject) (p:string) =
             ob.Plurals <- ob.Plurals @- p
+
             
             
 
