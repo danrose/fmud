@@ -7,6 +7,11 @@
         | Id of Guid
         | Query of string
 
+        type Perspective =
+            | First
+            | Third
+            | Calculate of GameObject
+
         let IdMatch query =
             match query with
             | Id id
@@ -14,16 +19,25 @@
             | Query qs
                 -> false
 
-        let GetName (ob:GameObject) =
-            ob.Name
+        let private perspective (who:Perspective) (ob:GameObject) fp (f: GameObject -> string) =
+            match who with
+            | Calculate w when w = ob ->
+                fp
+            | First ->
+                fp
+            | _ -> 
+                f ob
+
+        let GetName (who:Perspective) (ob:GameObject) =
+            perspective who ob "you" (fun ob -> ob.Name)
 
         let SetName (ob:GameObject) name =
             ob.Name <- name
 
-        let GetShort (ob:GameObject) =
-            ob.Short
+        let GetShort (who:Perspective) (ob:GameObject) =
+            perspective who ob "you" (fun ob -> ob.Short)
 
-        let SetShort (ob:GameObject) short =
+        let SetShort short (ob:GameObject) =
             ob.Short <- short
 
         let GetLong (ob:GameObject) =
@@ -32,8 +46,8 @@
         let SetLong (ob:GameObject) long =
             ob.Long <- long
 
-        let GetDeterminate (ob:GameObject) =
-            ob.Determinate
+        let GetDeterminate (who:Perspective) (ob:GameObject) =
+            perspective who ob "" (fun ob -> ob.Determinate)
 
         let SetDeterminate (ob:GameObject) determinate =
             ob.Determinate <- determinate

@@ -46,6 +46,7 @@
     <Compile Include="GameObject.fs" />
     <Compile Include="MobileObject.fs" />
     <Compile Include="Container.fs" />
+    <Compile Include="Message.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <None Include="packages.config" />

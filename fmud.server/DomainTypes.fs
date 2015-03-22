@@ -5,25 +5,26 @@
         open SharedFunctions
 
         type PropertyTimeout =
-        | Unlimited
-        | Timed of TimeSpan
+            | Unlimited
+            | Timed of TimeSpan
 
         type Limit =
             | Unlimited
             | Limit of int
 
-        type PropertyEntry = 
-            { key: string; value: string; timeout: PropertyTimeout }
+        type PropertyEntry = { key: string; value: string; timeout: PropertyTimeout }
 
-        type LightLevel = 
-            | LightLevel of int
+        type LightLevel = | LightLevel of int
 
-        type MoveResult =  
-            | Invalid
-            | CantRemoveFromSource
-            | CantAddToDestination
-            | TooHeavy
-            | Ok
+        type MoveResult = Invalid | CantRemoveFromSource | CantAddToDestination | TooHeavy | Ok
+
+        /// Colour and style information
+        type Colour = Default | Red | Orange | Yellow | Green | Blue | Indigo | Violet | Grey | White | Pink
+
+        type Decoration = NoDecoration | Bold | Italic
+
+        let DefaultStyle = Colour.Default,Decoration.NoDecoration
+
 
         [<AbstractClass>]
         type GameObject(id: Guid) =  
@@ -76,7 +77,24 @@
         and public Container =
             | Container of ResizeArray<MobileObject>
 
-            
+        type MsgToken = 
+            | Space
+            | Literal of string
+            | Possessive of MobileObject
+            | Short of MobileObject
+            | Long of MobileObject
+            | OneShort of MobileObject
+            | TheShort of MobileObject
+            | Pronoun of MobileObject
+            | Objective of MobileObject
+            | Verb of string * string
+            | Style of Colour * Decoration
+
+        type Message = MsgToken list
+
+        type public Player(id: Guid) =
+            inherit MobileObject(id)
+
 
       //  [<AbstractClass>]
      //   type public Room(id: Guid) =
