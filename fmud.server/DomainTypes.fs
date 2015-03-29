@@ -4,6 +4,12 @@
         open System
         open SharedFunctions
 
+        type Descriptor =
+            | Description of string
+            | Callback of (unit -> string)
+
+        let emptyDescription = Description ""
+
         type PropertyTimeout =
             | Unlimited
             | Timed of TimeSpan
@@ -29,10 +35,11 @@
         [<AbstractClass>]
         type GameObject(id: Guid) =  
             
-            let mutable name = ""
-            let mutable short = ""
-            let mutable long = ""
-            let mutable determinate = ""
+            let mutable name = emptyDescription
+            let mutable short = emptyDescription
+            let mutable long = emptyDescription
+            let mutable determinate = emptyDescription
+            let mutable mainPlural = emptyDescription
             let mutable alias = Set.empty<string>
             let mutable plurals = Set.empty<string>
             let mutable adjectives = Set.empty<string>
@@ -43,6 +50,7 @@
             member this.Determinate with get() = determinate and set(n) = determinate <- n
             member this.Long with get() = long and set(n) = long <- n
             member this.Alias with get() = alias and set(n) = alias <- n
+            member this.MainPlural with get() = mainPlural and set(n) = mainPlural <- n
             member this.Plurals with get() = plurals and set(n) = plurals <- n
             member this.Adjectives with get() = adjectives and set(n) = adjectives <- n
 

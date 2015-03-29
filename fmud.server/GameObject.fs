@@ -2,6 +2,7 @@
     module GameObject =
         open System
         open DomainTypes
+        open Descriptors
 
         type MatchOption = 
         | Id of Guid
@@ -19,7 +20,7 @@
             | Query qs
                 -> false
 
-        let perspective (who:Perspective) (ob:GameObject) fp (f: GameObject -> string) =
+        let perspective (who:Perspective) (ob:GameObject) fp (f: GameObject -> Descriptor) =
             match who with
             | Calculate w when w = ob ->
                 fp
@@ -27,6 +28,7 @@
                 fp
             | _ -> 
                 f ob
+                |> Descriptors.eval
 
         let GetName (who:Perspective) (ob:GameObject) =
             perspective who ob "you" (fun ob -> ob.Name)
@@ -41,8 +43,10 @@
             ob.Short <- short
 
         let GetLong (ob:GameObject) =
-            ob.Long
-
+            match Descriptors.eval ob.Long with
+            | s when String.IsNullOrEmpty s -> "Nothing to see."
+            | s -> s
+ 
         let SetLong (ob:GameObject) long =
             ob.Long <- long
 

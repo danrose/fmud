@@ -14,16 +14,16 @@
         let GetPossessive (who:Perspective) (ob:LivingObject) =
             perspective who ob "your" (fun x ->
                 match ob.Gender with
-                | Neuter -> "its"
-                | Male -> "his"
-                | Female -> "her"
+                | Neuter -> Description "its"
+                | Male -> Description "his"
+                | Female -> Description "her"
             )
 
         let GetObjective (who:Perspective) (ob:LivingObject) =
             perspective who ob "you" (fun x ->
                 match ob.Gender with
-                | Neuter -> "it"
-                | Male -> "him"
-                | Female -> "her"
+                | Neuter -> Description "it"
+                | Male -> Description "him"
+                | Female -> Description "her"
             )
 

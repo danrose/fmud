@@ -43,6 +43,7 @@
     <Compile Include="Grammar.fs" />
     <Compile Include="SharedFunctions.fs" />
     <Compile Include="DomainTypes.fs" />
+    <Compile Include="Descriptors.fs" />
     <Compile Include="GameObject.fs" />
     <Compile Include="MobileObject.fs" />
     <Compile Include="Living.fs" />
