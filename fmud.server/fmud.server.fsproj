@@ -48,6 +48,7 @@
     <Compile Include="MobileObject.fs" />
     <Compile Include="Living.fs" />
     <Compile Include="Container.fs" />
+    <Compile Include="Movement.fs" />
     <Compile Include="Message.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />

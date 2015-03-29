@@ -33,7 +33,7 @@
         let GetName (who:Perspective) (ob:GameObject) =
             perspective who ob "you" (fun ob -> ob.Name)
 
-        let SetName (ob:GameObject) name =
+        let SetName name (ob:GameObject) =
             ob.Name <- name
 
         let GetShort (who:Perspective) (ob:GameObject) =
@@ -42,12 +42,18 @@
         let SetShort short (ob:GameObject) =
             ob.Short <- short
 
+        let GetMainAlias (ob:GameObject) =
+            Descriptors.eval ob.MainPlural
+
+        let SetMainAlias alias (ob:GameObject) =
+            ob.MainPlural <- alias
+
         let GetLong (ob:GameObject) =
             match Descriptors.eval ob.Long with
             | s when String.IsNullOrEmpty s -> "Nothing to see."
             | s -> s
  
-        let SetLong (ob:GameObject) long =
+        let SetLong long (ob:GameObject) =
             ob.Long <- long
 
         let GetDeterminate (who:Perspective) (ob:GameObject) =
