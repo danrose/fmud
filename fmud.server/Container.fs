@@ -13,13 +13,16 @@
 
         /// main access point for getting a container's inventory
         let public inventory c =
-            c |> unwrap |> List.ofSeq
+            unwrap c |> List.ofSeq
 
         let public allowAdd (destination:Container) (source:Container) =
             true
 
         let public remove ob c =
-            (c |> unwrap).Remove(ob)
+            (unwrap c).Remove(ob)
 
         let public add ob c =
-            (c |> unwrap).Add(ob)
+            (unwrap c).Add(ob)
+
+        let public count c =
+            (unwrap c).Count

@@ -42,13 +42,14 @@
             match moveValidations {source=mob; destination=destination} with
             | Success _ -> 
                 match environment mob with
-                | Some env
-                    -> //env.Remove mob
-                      // destination.Add mob
-                       Ok
+                | Some env -> 
+                    env |> remove mob |> ignore
+                    destination |> add mob
+                    Ok               
                 | None -> 
                     destination |> add mob
                     Ok
             | Failure reason 
                 -> reason
 
+        let moveSilently mob destination = move "" "" mob destination
