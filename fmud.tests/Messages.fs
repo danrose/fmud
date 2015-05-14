@@ -11,10 +11,10 @@ type Messages() =
 
     let createPeople() =
         let bob = new Player(Guid.NewGuid())
-        bob |> GameObject.SetShort (Description "Bob")
+        bob |> GameObject.setShort (Description "Bob")
 
         let alice = new Player(Guid.NewGuid())
-        alice |> GameObject.SetShort (Description "Alice")
+        alice |> GameObject.setShort (Description "Alice")
 
         bob,alice
         

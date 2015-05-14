@@ -5,13 +5,22 @@
         open GameObject
         open MobileObject
 
-        let GetGender (ob:LivingObject) =
+        let filterObjects (except: LivingObject list) (list: MobileObject list) =
+            list 
+            |> List.filter (fun x ->
+                match x with
+                | :? LivingObject -> except |> List.exists (fun exc -> exc.id = x.id)
+                | _ -> false)
+            |> List.map (fun x -> x :?> LivingObject)
+                
+        
+        let getGender (ob:LivingObject) =
             ob.Gender
 
-        let SetGender gender (ob:LivingObject) =
+        let setGender gender (ob:LivingObject) =
             ob.Gender <- gender
 
-        let GetPossessive (who:Perspective) (ob:LivingObject) =
+        let getPossessive (who:Perspective) (ob:LivingObject) =
             perspective who ob "your" (fun x ->
                 match ob.Gender with
                 | Neuter -> Description "its"
@@ -19,11 +28,14 @@
                 | Female -> Description "her"
             )
 
-        let GetObjective (who:Perspective) (ob:LivingObject) =
+        let getObjective (who:Perspective) (ob:LivingObject) =
             perspective who ob "you" (fun x ->
                 match ob.Gender with
                 | Neuter -> Description "it"
                 | Male -> Description "him"
                 | Female -> Description "her"
             )
+
+        let getWatchers (ob:LivingObject) =
+            ob.Watchers
 

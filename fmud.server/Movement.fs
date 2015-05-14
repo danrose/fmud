@@ -38,18 +38,34 @@
             >> bind canRemoveFromSource
             >> bind canEnterDestination
 
-        let move msgOut msgIn mob destination =
+        let move msgOut msgIn (mob:MobileObject) destination =
             match moveValidations {source=mob; destination=destination} with
+            | Failure reason  -> reason
             | Success _ -> 
+                // if they are currently in an environment then remove them from it
                 match environment mob with
-                | Some env -> 
-                    env |> remove mob |> ignore
-                    destination |> add mob
-                    Ok               
-                | None -> 
-                    destination |> add mob
-                    Ok
-            | Failure reason 
-                -> reason
+                | Some env ->
+                    // remove them from their existing env 
+                    env |> remove mob |> ignore  
 
-        let moveSilently mob destination = move "" "" mob destination
+                    // determines which perspectives are valid and whether
+                    // the object should be informed
+                    let inform msg firstPerson =
+                        if msg <> noMessage then
+                            let p1,_,p3 = Message.createPerspectives msgOut mob None
+                            match mob with
+                            | :? LivingObject ->
+                                let who = mob :?> LivingObject
+                                if firstPerson then who |> Message.tellPerson p1
+                                env |> Message.tellContainer p3 [who]
+                            | _ -> 
+                                env |> Message.tellContainer p3 []
+
+                    inform msgOut true
+                    inform msgIn false             
+                | _ -> ()
+            
+                destination |> add mob
+                Ok  
+
+        let moveSilently mob destination = move [] [] mob destination

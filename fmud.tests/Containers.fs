@@ -8,6 +8,10 @@ type Containers() =
     let (===) (x:obj) (y:obj) =
         Assert.AreEqual(x, y)
 
+    let itemName name item =
+        item |> GameObject.setName (Description name)
+        item |> GameObject.setShort (Description name)
+
     [<Test>]
     member this.EmptyContainer() =
         let c = Container.empty()
@@ -17,8 +21,7 @@ type Containers() =
     member this.AddItem() =
         let c = Container.empty()
         let item = { new MobileObject(System.Guid.NewGuid()) with member x.ToString() = base.ToString() }
-        item |> GameObject.SetName (Description "ball")
-        item |> GameObject.SetShort (Description "ball")
+        item |> itemName "ball"
 
         let moveResult = Movement.moveSilently item c
         
@@ -32,12 +35,10 @@ type Containers() =
         let c = Container.empty()
 
         let item1 = { new MobileObject(System.Guid.NewGuid()) with member x.ToString() = base.ToString() }
-        item1 |> GameObject.SetName (Description "ball")
-        item1 |> GameObject.SetShort (Description "ball")
+        item1 |> itemName "ball"
 
         let item2 = { new MobileObject(System.Guid.NewGuid()) with member x.ToString() = base.ToString() }
-        item2 |> GameObject.SetName (Description "goat")
-        item2 |> GameObject.SetShort (Description "goat")
+        item2 |> itemName "goat"
 
         let moveResult1 = Movement.moveSilently item1 c
         let moveResult2 = Movement.moveSilently item2 c
@@ -56,12 +57,10 @@ type Containers() =
         let c = Container.empty()
 
         let item1 = { new MobileObject(System.Guid.NewGuid()) with member x.ToString() = base.ToString() }
-        item1 |> GameObject.SetName (Description "ball")
-        item1 |> GameObject.SetShort (Description "ball")
+        item1 |> itemName "ball"
 
         let item2 = { new MobileObject(System.Guid.NewGuid()) with member x.ToString() = base.ToString() }
-        item2 |> GameObject.SetName (Description "goat")
-        item2 |> GameObject.SetShort (Description "goat")
+        item2 |> itemName "goat"
 
         let moveResult1 = Movement.moveSilently item1 c
         let moveResult2 = Movement.moveSilently item2 c

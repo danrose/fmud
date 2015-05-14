@@ -13,80 +13,74 @@
             | Third
             | Calculate of GameObject
 
-        let IdMatch query =
+        let idMatch query =
             match query with
-            | Id id
-                -> false
-            | Query qs
-                -> false
+            | Id id -> false
+            | Query qs -> false
 
         let perspective (who:Perspective) (ob:GameObject) fp (f: GameObject -> Descriptor) =
             match who with
-            | Calculate w when w = ob ->
-                fp
-            | First ->
-                fp
-            | _ -> 
-                f ob
-                |> Descriptors.eval
+            | Calculate w when w = ob -> fp
+            | First -> fp
+            | _ -> f ob |> Descriptors.eval
 
-        let GetName (who:Perspective) (ob:GameObject) =
+        let getName (who:Perspective) (ob:GameObject) =
             perspective who ob "you" (fun ob -> ob.Name)
 
-        let SetName name (ob:GameObject) =
+        let setName name (ob:GameObject) =
             ob.Name <- name
 
-        let GetShort (who:Perspective) (ob:GameObject) =
+        let getShort (who:Perspective) (ob:GameObject) =
             perspective who ob "you" (fun ob -> ob.Short)
 
-        let SetShort short (ob:GameObject) =
+        let setShort short (ob:GameObject) =
             ob.Short <- short
 
-        let GetMainAlias (ob:GameObject) =
+        let getMainAlias (ob:GameObject) =
             Descriptors.eval ob.MainPlural
 
-        let SetMainAlias alias (ob:GameObject) =
+        let setMainAlias alias (ob:GameObject) =
             ob.MainPlural <- alias
 
-        let GetLong (ob:GameObject) =
+        let getLong (ob:GameObject) =
             match Descriptors.eval ob.Long with
             | s when String.IsNullOrEmpty s -> "Nothing to see."
             | s -> s
  
-        let SetLong long (ob:GameObject) =
+        let setLong long (ob:GameObject) =
             ob.Long <- long
 
-        let GetDeterminate (who:Perspective) (ob:GameObject) =
+        let getDeterminate (who:Perspective) (ob:GameObject) =
             perspective who ob "" (fun ob -> ob.Determinate)
 
-        let SetDeterminate (ob:GameObject) determinate =
+        let setDeterminate (ob:GameObject) determinate =
             ob.Determinate <- determinate
 
-        let GetAliases (ob:GameObject) =
+        let getAliases (ob:GameObject) =
             ob.Alias |> Seq.toList
 
-        let AddAlias (ob:GameObject) (a:string) =
+        let addAlias (ob:GameObject) (a:string) =
             ob.Alias <- ob.Alias @+ a
 
-        let RemoveAlias (ob:GameObject) (a:string) =
+        let removeAlias (ob:GameObject) (a:string) =
             ob.Alias <- ob.Alias @- a
 
-        let GetAdjectives (ob:GameObject) =
+        let getAdjectives (ob:GameObject) =
             ob.Adjectives |> Seq.toList
 
-        let AddAdjectives (ob:GameObject) (a:string) =
+        let addAdjectives (ob:GameObject) (a:string) =
             ob.Adjectives <- ob.Adjectives @+ a
 
-        let RemoveAdjective (ob:GameObject) (a:string) =
+        let removeAdjective (ob:GameObject) (a:string) =
             ob.Adjectives <- ob.Adjectives @- a
 
-        let GetPlural (ob:GameObject) =
+        let getPlural (ob:GameObject) =
             ob.Plurals |> Seq.toList
 
-        let AddPlural (ob:GameObject) (p:string) =
+        let addPlural (ob:GameObject) (p:string) =
             ob.Plurals <- ob.Plurals @+ p
 
-        let RemovePlural (ob:GameObject) (p:string) =
+        let removePlural (ob:GameObject) (p:string) =
             ob.Plurals <- ob.Plurals @- p
 
             

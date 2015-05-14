@@ -4,22 +4,27 @@
         open System
         open SharedFunctions
 
+        /// Represents a string or a callback to generate one
         type Descriptor =
             | Description of string
             | Callback of (unit -> string)
 
         let emptyDescription = Description ""
 
+        /// Represents a timeout, usually applied to timed properties
         type PropertyTimeout =
             | Unlimited
             | Timed of TimeSpan
 
+        /// A generic limit
         type Limit =
             | Unlimited
             | Limit of int
 
+        /// Models a generic property
         type PropertyEntry = { key: string; value: string; timeout: PropertyTimeout }
 
+        /// The amount of light 
         type LightLevel = | LightLevel of int
 
         type MoveResult = Invalid | CantRemoveFromSource | CantAddToDestination | TooHeavy | Ok
@@ -31,6 +36,9 @@
 
         let DefaultStyle = Colour.Default,Decoration.NoDecoration
 
+        /// Interface used to symbolise a message sink (usually a player)
+        type Watcher =
+            abstract DisplayMessage: string -> unit        
 
         [<AbstractClass>]
         type GameObject(id: Guid) =  
@@ -92,7 +100,10 @@
             inherit MobileObject(id)
 
             let mutable gender = Neuter
+            let mutable watchers: Watcher list = List.empty
+
             member this.Gender with get() = gender and set(g) = gender <- g
+            member this.Watchers with get() = watchers and set(w) = watchers <- w
 
         type public Player(id: Guid) =
             inherit LivingObject(id)
@@ -113,11 +124,11 @@
             | Style of Colour * Decoration
 
         type Message = MsgToken list
+        let (noMessage: Message) = List.empty
 
-
-      //  [<AbstractClass>]
-     //   type public Room(id: Guid) =
-      //      inherit GameObject(id)
+        //[<AbstractClass>]
+       // type public Room(id: Guid) =
+       //     inherit GameObject(id)
 
        //     let container = Container()
 
