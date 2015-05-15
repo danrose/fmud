@@ -67,6 +67,7 @@
     <Compile Include="Containers.fs" />
     <Compile Include="Rooms.fs" />
     <Compile Include="Messages.fs" />
+    <Compile Include="Movement.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\fmud.server\fmud.server.fsproj">

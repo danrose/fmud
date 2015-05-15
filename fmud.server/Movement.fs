@@ -52,10 +52,9 @@
                     // the object should be informed
                     let inform msg firstPerson =
                         if msg <> noMessage then
-                            let p1,_,p3 = Message.createPerspectives msgOut mob None
+                            let p1,_,p3 = Message.createPerspectives msg mob None
                             match mob with
-                            | :? LivingObject ->
-                                let who = mob :?> LivingObject
+                            | :? LivingObject as who ->
                                 if firstPerson then who |> Message.tellPerson p1
                                 env |> Message.tellContainer p3 [who]
                             | _ -> 
@@ -63,9 +62,12 @@
 
                     inform msgOut true
                     inform msgIn false             
-                | _ -> ()
+                | _ -> 
+                    printfn "No environment"
+                    ()
             
                 destination |> add mob
+                mob.Environment <- Some destination
                 Ok  
 
         let moveSilently mob destination = move [] [] mob destination

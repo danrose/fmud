@@ -6,12 +6,14 @@
         open MobileObject
 
         let filterObjects (except: LivingObject list) (list: MobileObject list) =
-            list 
-            |> List.filter (fun x ->
-                match x with
-                | :? LivingObject -> except |> List.exists (fun exc -> exc.id = x.id)
-                | _ -> false)
-            |> List.map (fun x -> x :?> LivingObject)
+            let ret = 
+                list 
+                |> List.filter (fun x ->
+                    match x with
+                    | :? LivingObject -> not(except |> List.exists (fun exc -> exc.id = x.id))
+                    | _ -> false)
+                |> List.map (fun x -> x :?> LivingObject)
+            ret
                 
         
         let getGender (ob:LivingObject) =
