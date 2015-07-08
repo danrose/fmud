@@ -12,9 +12,6 @@ type ConsoleWatcher() =
 
 [<TestFixture>]
 type Movement() = 
-    let (===) (x:obj) (y:obj) =
-        Assert.AreEqual(x, y)
-
     let itemName name item =
         item |> GameObject.setName (Description name)
         item |> GameObject.setShort (Description name)
@@ -31,7 +28,7 @@ type Movement() =
         // create a ball
 
         // set up a watcher
-        let watcher = ConsoleWatcher()
+        let watcher = new ConsoleWatcher()
         let observer = { new LivingObject(Guid.NewGuid()) with member x.ToString() = base.ToString() }
         observer.Watchers <- watcher :> Watcher :: observer.Watchers
 

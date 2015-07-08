@@ -6,9 +6,6 @@ open System
 
 [<TestFixture>]
 type Messages() = 
-    let (===) (x:obj) (y:obj) =
-        Assert.AreEqual(x, y)
-
     let createPeople() =
         let bob = new Player(Guid.NewGuid())
         bob |> GameObject.setShort (Description "Bob")

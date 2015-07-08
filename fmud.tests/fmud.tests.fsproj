@@ -61,8 +61,8 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Shared.fs" />
     <Compile Include="SetOperators.fs" />
-    <None Include="Script.fsx" />
     <None Include="packages.config" />
     <Compile Include="Containers.fs" />
     <Compile Include="Rooms.fs" />

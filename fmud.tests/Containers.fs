@@ -5,9 +5,6 @@ open fmud
 
 [<TestFixture>]
 type Containers() = 
-    let (===) (x:obj) (y:obj) =
-        Assert.AreEqual(x, y)
-
     let itemName name item =
         item |> GameObject.setName (Description name)
         item |> GameObject.setShort (Description name)

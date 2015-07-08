@@ -13,8 +13,7 @@
                     | :? LivingObject -> not(except |> List.exists (fun exc -> exc.id = x.id))
                     | _ -> false)
                 |> List.map (fun x -> x :?> LivingObject)
-            ret
-                
+            ret            
         
         let getGender (ob:LivingObject) =
             ob.Gender
