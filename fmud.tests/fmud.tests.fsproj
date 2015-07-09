@@ -66,6 +66,7 @@
     <None Include="packages.config" />
     <Compile Include="Containers.fs" />
     <Compile Include="Rooms.fs" />
+    <Compile Include="FormattedStrings.fs" />
     <Compile Include="Messages.fs" />
     <Compile Include="Movement.fs" />
   </ItemGroup>

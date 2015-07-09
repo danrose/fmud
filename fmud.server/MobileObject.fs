@@ -1,7 +1,5 @@
-﻿namespace fmud
-    module MobileObject =
-        open System
-        open DomainTypes
+﻿module fmud.MobileObject
+    open System
 
-        let environment (ob:MobileObject) =
-            ob.Environment
+    let environment (ob:MobileObject) =
+        ob.Environment

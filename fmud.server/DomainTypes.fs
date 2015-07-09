@@ -1,140 +1,150 @@
-﻿namespace fmud
-    [<AutoOpen>]
-    module DomainTypes =
-        open System
-        open SharedFunctions
+﻿[<AutoOpen>]
+module fmud.DomainTypes
+    open System
+    open SharedFunctions
 
-        /// Represents a string or a callback to generate one
-        type Descriptor =
-            | Description of string
-            | Callback of (unit -> string)
+    /// Represents a string or a callback to generate one
+    type Descriptor =
+        | Description of string
+        | Callback of (unit -> string)
 
-        let emptyDescription = Description ""
+    let emptyDescription = Description ""
 
-        /// Represents a timeout, usually applied to timed properties
-        type PropertyTimeout =
-            | Unlimited
-            | Timed of TimeSpan
+    /// Represents a timeout, usually applied to timed properties
+    type PropertyTimeout =
+        | Unlimited
+        | Timed of TimeSpan
 
-        /// A generic limit
-        type Limit =
-            | Unlimited
-            | Limit of int
+    /// A generic limit
+    type Limit =
+        | Unlimited
+        | Limit of int
 
-        /// Models a generic property
-        type PropertyEntry = { key: string; value: string; timeout: PropertyTimeout }
+    /// Models a generic property
+    type PropertyEntry = 
+        { key: string; 
+        value: string; 
+        timeout: 
+        PropertyTimeout }
 
-        /// The amount of light 
-        type LightLevel = | LightLevel of int
+    /// The amount of light 
+    type LightLevel = | LightLevel of int
 
-        type MoveResult = Invalid | CantRemoveFromSource | CantAddToDestination | TooHeavy | Ok
+    type MoveResult = Invalid | CantRemoveFromSource | CantAddToDestination | TooHeavy | Ok
+        
+    type Inform = | Default | Say | Environmental | Tell | Shout | Damage | Combat | Spell | Skill | Death | Channel | Guild
 
-        /// Colour and style information
-        type Colour = Default | Red | Orange | Yellow | Green | Blue | Indigo | Violet | Grey | White | Pink
+    /// Colour and style information
+    type Colour = Default | Red | Orange | Yellow | Green | Blue | Indigo | Violet | Grey | White | Pink
+    type Decoration = NoDecoration | Bold | Italic
+    let DefaultStyle = Colour.Default,Decoration.NoDecoration
+    type StyledString = | SString of Inform * string * (int*Colour*Decoration) list
 
-        type Decoration = NoDecoration | Bold | Italic
+    /// Interface used to symbolise a message sink (usually a player)
+    type Watcher =
+        abstract DisplayMessage: string -> unit        
 
-        let DefaultStyle = Colour.Default,Decoration.NoDecoration
-
-        /// Interface used to symbolise a message sink (usually a player)
-        type Watcher =
-            abstract DisplayMessage: string -> unit        
-
-        [<AbstractClass>]
-        type GameObject(id: Guid) =  
+    [<AbstractClass>]
+    type GameObject(id: Guid) =  
             
-            let mutable name = emptyDescription
-            let mutable short = emptyDescription
-            let mutable long = emptyDescription
-            let mutable determinate = emptyDescription
-            let mutable mainPlural = emptyDescription
-            let mutable alias = Set.empty<string>
-            let mutable plurals = Set.empty<string>
-            let mutable adjectives = Set.empty<string>
+        let mutable name = emptyDescription
+        let mutable short = emptyDescription
+        let mutable long = emptyDescription
+        let mutable determinate = emptyDescription
+        let mutable mainPlural = emptyDescription
+        let mutable alias = Set.empty<string>
+        let mutable plurals = Set.empty<string>
+        let mutable adjectives = Set.empty<string>
 
-            member this.id = id
-            member this.Name with get() = name and set(n) = name <- n
-            member this.Short with get() = short and set(n) = short <- n
-            member this.Determinate with get() = determinate and set(n) = determinate <- n
-            member this.Long with get() = long and set(n) = long <- n
-            member this.Alias with get() = alias and set(n) = alias <- n
-            member this.MainPlural with get() = mainPlural and set(n) = mainPlural <- n
-            member this.Plurals with get() = plurals and set(n) = plurals <- n
-            member this.Adjectives with get() = adjectives and set(n) = adjectives <- n
+        member this.id = id
+        member this.Name with get() = name and set(n) = name <- n
+        member this.Short with get() = short and set(n) = short <- n
+        member this.Determinate with get() = determinate and set(n) = determinate <- n
+        member this.Long with get() = long and set(n) = long <- n
+        member this.Alias with get() = alias and set(n) = alias <- n
+        member this.MainPlural with get() = mainPlural and set(n) = mainPlural <- n
+        member this.Plurals with get() = plurals and set(n) = plurals <- n
+        member this.Adjectives with get() = adjectives and set(n) = adjectives <- n
 
-             // name and descriptions
+            // name and descriptions
 
-            interface IDisposable with 
-                member this.Dispose() =
-                    ()
-
-            member this.Destroy =
+        interface IDisposable with 
+            member this.Dispose() =
                 ()
-        and ExtraLook = 
-            {key: string; func: GameObject -> string;}
 
-        [<AbstractClass>]
-        type public MobileObject(id: Guid) =
-            inherit GameObject(id)
+        member this.Destroy =
+            ()
 
-            let mutable (environment:Container option) = None
-            member this.Environment with get() = environment and set(e) = environment <- e
+    and ExtraLook = 
+        { key: string; 
+        func: GameObject -> string; }
 
-            abstract CanEnterContainer: Container -> bool
-            default this.CanEnterContainer c =
-                true
-            abstract member CanLeaveContainer: Container -> bool
-            default this.CanLeaveContainer c =
-                true
+    [<AbstractClass>]
+    type public MobileObject(id: Guid) =
+        inherit GameObject(id)
 
-        and IHaveContainer =
-            abstract Container:Container with get
-        and EnvPair = { source:MobileObject;destination:Container; }
-        and public Container =
-            | Container of ResizeArray<MobileObject>
+        let mutable (environment:Container option) = None
+        member this.Environment with get() = environment and set(e) = environment <- e
 
-        type Gender = Neuter | Male | Female
+        abstract CanEnterContainer: Container -> bool
+        default this.CanEnterContainer c =
+            true
+        abstract member CanLeaveContainer: Container -> bool
+        default this.CanLeaveContainer c =
+            true
 
-        [<AbstractClass>]
-        type public LivingObject(id: Guid) =
-            inherit MobileObject(id)
+    and IHaveContainer =
+        abstract Container:Container with get
 
-            let mutable gender = Neuter
-            let mutable watchers: Watcher list = List.empty
+    and EnvPair = 
+        { source:MobileObject;
+        destination:Container; }
 
-            member this.Gender with get() = gender and set(g) = gender <- g
-            member this.Watchers with get() = watchers and set(w) = watchers <- w
+    and public Container =
+        | Container of ResizeArray<MobileObject>
 
-        type public Player(id: Guid) =
-            inherit LivingObject(id)
+    type Gender = Neuter | Male | Female
 
-        type MsgToken = 
-            | Space
-            | Capitalise
-            | Literal of string
-            | Possessive of LivingObject
-            | Short of MobileObject
-            | Long of MobileObject
-            | OneShort of MobileObject
-            | TheShort of MobileObject
-            | PossessiveShort of LivingObject
-            | Pronoun of LivingObject
-            | Objective of MobileObject
-            | Verb of string * string
-            | Style of Colour * Decoration
+    [<AbstractClass>]
+    type public LivingObject(id: Guid) =
+        inherit MobileObject(id)
 
-        type Message = MsgToken list
-        let (noMessage: Message) = List.empty
+        let mutable gender = Neuter
+        let mutable watchers: Watcher list = List.empty
 
-        //[<AbstractClass>]
-       // type public Room(id: Guid) =
-       //     inherit GameObject(id)
+        member this.Gender with get() = gender and set(g) = gender <- g
+        member this.Watchers with get() = watchers and set(w) = watchers <- w
 
-       //     let container = Container()
+    type public Player(id: Guid) =
+        inherit LivingObject(id)
 
-        //    interface IHaveContainer with
-        //        member this.Container with get() = container
+    type MsgToken = 
+        | Space
+        | Capitalise
+        | Literal of string
+        | Possessive of LivingObject
+        | Short of MobileObject
+        | Long of MobileObject
+        | OneShort of MobileObject
+        | TheShort of MobileObject
+        | PossessiveShort of LivingObject
+        | Pronoun of LivingObject
+        | Objective of MobileObject
+        | Verb of string * string
+        | Style of Colour * Decoration
 
-        //    member this.a = 1
+    type Message = MsgToken list
+    let (noMessage: Message) = List.empty
+
+    //[<AbstractClass>]
+    // type public Room(id: Guid) =
+    //     inherit GameObject(id)
+
+    //     let container = Container()
+
+    //    interface IHaveContainer with
+    //        member this.Container with get() = container
+
+    //    member this.a = 1
 
                 
